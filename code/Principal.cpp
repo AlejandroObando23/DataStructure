@@ -1,10 +1,17 @@
 #include <isotream>
+#include <string.h>
 using namespace std;
-struct Admin{
 
-
+struct Persona{
+    string id;
+    string nombre;
+    string apellido;
 };
-struct Doctor{
 
+struct Turno{
+    string horaInicio;
+    string horaFinal;
+    Persona doctor;
+    Turno* siguiente;
 };
-struct
+
