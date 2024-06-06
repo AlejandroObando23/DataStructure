@@ -2,7 +2,7 @@
 #include <string.h>
 #include <iostream>
 #include <fstream>
-void cargar_personas(Persona<string, string, string> *&lista){
+void cargar_personas(Persona*& lista){
 	ifstream archivo;
 
 	archivo.open("Personas.txt",ios::in);
@@ -12,13 +12,13 @@ void cargar_personas(Persona<string, string, string> *&lista){
 	}
 
 	while(!archivo.eof()){
-		Persona<string, string, string> *nuevo=new(Persona<string, string, string>);
+		Persona* nuevo=new(Persona);
 
 		archivo>>nuevo->id;
 		archivo>>nuevo->nombre;
 		archivo>>nuevo->apellido;
 		nuevo->sig=nullptr;
-		Persona<string, string, string> *aux;
+		Persona* aux;
 
 		if(lista==NULL){
 			lista=nuevo;

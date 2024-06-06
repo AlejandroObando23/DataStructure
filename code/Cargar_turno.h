@@ -1,9 +1,9 @@
 #include<iostream>
 #include <string.h>
-#include <iostream>
-
 #include <fstream>
-void cargar_turno(Turno<string, string> *&lista){
+using namespace std;
+
+void cargar_turno(Turno*& lista){
 	ifstream archivo;
 
 	archivo.open("Turnos.txt",ios::in);
@@ -13,12 +13,12 @@ void cargar_turno(Turno<string, string> *&lista){
 	}
 
 	while(!archivo.eof()){
-		Turno<string, string> *nuevo=new(Turno<string, string>);
+		Turno* nuevo=new(Turno);
 
 		archivo>>nuevo->horaInicio;
 		archivo>>nuevo->horaFinal;
 		nuevo->sig=nullptr;
-		Turno<string, string> *aux;
+		Turno* aux;
 
 		if(lista==NULL){
 			lista=nuevo;
