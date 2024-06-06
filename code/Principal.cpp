@@ -3,28 +3,22 @@
 #include <iostream>
 #include <fstream>
 #include <conio.h>
+#include "struct_PersonaTurno.h"
+#include "Cargar_personas.h"
+#include "Cargar_turno.h"
+
 #define ANSI_BACKGROUND_BLUE "\033[44m"
 #define ANSI_BACKGROUND_RESET "\033[0m"
 
 using namespace std;
 
-struct Persona{
-    string id;
-    string nombre;
-    string apellido;
-    Persona* sig;
-};
 
-struct Turno{
-    string horaInicio;
-    string horaFinal;
-    Persona doctor;
-    Turno* siguiente;
-};
-void cargar_personas();
+void cargar_personas(Persona<string,string,string> *&lista);
 
 int escogerOpcion();
 void mostrarMenuPrincipal(int opcionActual);
+void mostar_Personas(Persona<string,string,string> *aux);
+void mostar_Turnos(Turno<string,string> *aux);
 
 int main(){
 
@@ -33,8 +27,22 @@ int main(){
 
     do{
         opcion = escogerOpcion();
+        Persona<string,string,string> *lista=nullptr;
+        Turno<string,string> *listat=nullptr;
+        cargar_personas(lista);
+        cargar_turno(listat);
+
 
         switch(opcion){
+        case 1:
+
+            break;
+        case 4:
+            mostar_Personas(lista);
+            break;
+        case 5:
+            mostar_Turnos(listat);
+            break;
 
         }
 
@@ -50,8 +58,8 @@ int escogerOpcion(){
 		mostrarMenuPrincipal(opcionActual);
 		char tecla =_getch();
 		switch(tecla){
-			case 72: opcionActual=(opcionActual>1)?opcionActual-1:5; break;
-			case 80: opcionActual=opcionActual<5?opcionActual+1:1; break;
+			case 72: opcionActual=(opcionActual>1)?opcionActual-1:6; break;
+			case 80: opcionActual=opcionActual<6?opcionActual+1:1; break;
 			case 13:system("cls");
 					switch(opcionActual){
 						case 1: return 1;break;
@@ -59,6 +67,7 @@ int escogerOpcion(){
 						case 3: return 3;break;
 						case 4: return 4;break;
 						case 5: return 5;break;
+						case 6: return 6;break;
 					};break;
 			}
 	}
@@ -68,7 +77,7 @@ void mostrarMenuPrincipal(int opcionActual){
     cout << "\t\t=== Bienvenido al sistema de Turnos ===" << endl;
     cout << "\n\tSeleccione una opcion:\n" << endl;
 
-    for(int i=1;i<=5;i++){
+    for(int i=1;i<=6;i++){
     	if(i==opcionActual){
     		printf("%s",ANSI_BACKGROUND_BLUE);
 		}
@@ -85,7 +94,9 @@ void mostrarMenuPrincipal(int opcionActual){
                 break;
 			case 4: cout << "\t4. Ver lista de Personas" << endl;
                 break;
-            case 5: cout << "\t5. Salir"<< endl;
+			case 5: cout << "\t5. Ver lista de Turnos" << endl;
+                break;
+            case 6: cout << "\t6. Salir"<< endl;
                 break;
 			}
 	}
@@ -96,55 +107,23 @@ void mostrarMenuPrincipal(int opcionActual){
 
 
 
-void cargar_personas(Persona *&lista){
-	ifstream archivo;
-
-	archivo.open("Personas.txt",ios::in);
-	if(archivo.fail()){
-		cout<<"No se pudo abrir el archivo";
-		exit (1);
-	}
-
-	while(!archivo.eof()){
-		Persona *nuevo=new(Persona);
-
-		archivo>>nuevo->id;
-		archivo>>nuevo->nombre;
-		archivo>>nuevo->apellido;
-		nuevo->sig=nullptr;
-		Persona *aux;
-
-		if(lista==NULL){
-			lista=nuevo;
-		}
-		else{
-			aux=lista;
-			while(aux->sig!=NULL){
-				aux=aux->sig;
-			}
-			aux->sig=nuevo;
-		}
-	}
-
-	archivo.close();
-	return;
-}
 
 
-int Mostar_Personas(Persona *aux){
+
+void mostar_Turnos(Turno<string,string> *aux){
 
 	cout<<"\t------LISTA DE Personas REGISTRADOS--------"<<endl;
 	cout<<"\t==============================================================="<<endl;
-	cout<<"\t|   ID   |   NOMBRE   |   Apellido |"<<endl;
+	cout<<"\t| HORA INICIO | HORA LLEGADA |"<<endl;
 	cout<<"\t==============================================================="<<endl;
 
-            Persona *alumnoEncontrado = aux;
-            while (alumnoEncontrado != NULL) {
-                alumnoEncontrado = alumnoEncontrado->sig;
+            Turno<string,string> *turnoEncontrado = aux;
+            while (turnoEncontrado != NULL) {
+                turnoEncontrado = turnoEncontrado->sig;
 
 
-            if (alumnoEncontrado != NULL){
-                cout << "\n\t" << alumnoEncontrado->id << "\t" << alumnoEncontrado->nombre << "\t"<< endl;
+            if (turnoEncontrado != NULL){
+                cout << "\n\t" << turnoEncontrado->horaInicio<< "\t"<< turnoEncontrado->horaFinal<< "\t"<< endl;
             }
 
             }
@@ -152,5 +131,28 @@ int Mostar_Personas(Persona *aux){
 
     cout << "\n";
 	system("pause");
-	return 1;
 }
+
+void mostar_Personas(Persona<string,string,string> *aux){
+
+	cout<<"\t------LISTA DE Personas REGISTRADOS--------"<<endl;
+	cout<<"\t==============================================================="<<endl;
+	cout<<"\t|   ID   |   NOMBRE   |   Apellido |"<<endl;
+	cout<<"\t==============================================================="<<endl;
+
+            Persona<string,string,string> *alumnoEncontrado = aux;
+            while (alumnoEncontrado != NULL) {
+                alumnoEncontrado = alumnoEncontrado->sig;
+
+
+            if (alumnoEncontrado != NULL){
+                cout << "\n\t" << alumnoEncontrado->id << "\t" << alumnoEncontrado->nombre <<"\t"<< alumnoEncontrado->apellido<< "\t"<< endl;
+            }
+
+            }
+
+
+    cout << "\n";
+	system("pause");
+}
+
