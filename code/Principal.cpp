@@ -7,6 +7,7 @@
 #include "Cargar_personas.h"
 #include "Cargar_turno.h"
 #include "ImprimirTurno.h"
+#include "ValidarPin.h"
 
 #define ANSI_BACKGROUND_BLUE "\033[44m"
 #define ANSI_BACKGROUND_RESET "\033[0m"
@@ -15,8 +16,6 @@ using namespace std;
 
 void cargar_personas(Persona*& lista);
 int escogerOpcion();
-int pedirPIN();
-bool validarPIN(int pinIngresado, int pinCorrecto);
 void mostrarMenuPrincipal(int opcionActual);
 void mostar_Personas(Persona* aux);
 void mostar_Turnos(Turno* aux);
@@ -39,7 +38,12 @@ int main(){
 
         switch(opcion){
         case 1:
-
+            cout<<"-----Agregar Turno----"<<endl;
+            pedirPin();
+            break;
+        case 2:
+            cout<<"-----Modificar Turno----"<<endl;
+            pedirPin();
             break;
         case 4:
             mostar_Personas(inicioPersona);
@@ -157,24 +161,4 @@ void mostar_Personas(Persona* aux){
 	system("pause");
 }
 
-int pedirPIN() {
-  int pinIngresado;
 
-  do{
-    cout<<"Ingrese su PIN de 4 dígitos: ";
-    cin>>pinIngresado;
-
-    if(cin.fail() || (pinIngresado < 1000 || pinIngresado > 9999)){
-      cin.clear();
-      cin.ignore();
-      cout<<"Error: El PIN debe ser un número de 4 dígitos."<<endl;
-    }else{
-      cout<<"Error: PIN incorrecto."<<endl;
-    }
-  }while(cin.fail() || (pinIngresado < 1000 || pinIngresado > 9999));
-  return pinIngresado;
-}
-
-bool validarPIN(int pinIngresado, int pinCorrecto) {
-  return pinIngresado == pinCorrecto;
-}
