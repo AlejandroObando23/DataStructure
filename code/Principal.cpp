@@ -24,6 +24,7 @@ Persona* inicioPersona=nullptr;
 Turno* inicioTurno=nullptr;
 
 Turno* aux;
+Turno* aux2;
 
 int main(){
 
@@ -52,7 +53,7 @@ int main(){
             mostar_Turnos(inicioTurno);
             break;
         case 6:
-            aux = aux->sig;
+                aux2 = aux2->sig;
             break;
         }
 
@@ -86,7 +87,17 @@ int escogerOpcion(){
 
 void mostrarMenuPrincipal(int opcionActual){
     cout << "\t\t=== Bienvenido al sistema de Turnos ===" << endl;
-    imprimirInfoTurno(aux);
+        if(aux2 != nullptr && aux2->sig != nullptr)
+    {
+        imprimirInfoTurno(aux2);
+
+    }
+    else
+    {
+        aux2=aux;
+        imprimirInfoTurno(aux2);
+
+    }
     cout << "\n\tSeleccione una opcion:\n" << endl;
 	cout << "\t===========================" << endl;
     for(int i=1;i<=7;i++){
