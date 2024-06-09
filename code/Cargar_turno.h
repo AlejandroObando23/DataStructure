@@ -17,18 +17,20 @@ void cargar_turno(Turno*& lista){
 
 		archivo>>nuevo->horaInicio;
 		archivo>>nuevo->horaFinal;
-		nuevo->sig=nullptr;
+
 		Turno* aux;
 
 		if(lista==NULL){
 			lista=nuevo;
+			nuevo->sig = lista;
 		}
 		else{
 			aux=lista;
-			while(aux->sig!=NULL){
+			while(aux->sig!=lista){
 				aux=aux->sig;
 			}
 			aux->sig=nuevo;
+			nuevo->sig = lista;
 		}
 	}
 
