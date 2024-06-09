@@ -55,7 +55,15 @@ int main(){
         case 6:
                 aux2 = aux2->sig;
             break;
+
+
+        case 7:
+            cout<<"Saliendo del programa...";
+            salir = true;
+            break;
         }
+
+
 
     }while(!salir);
 
