@@ -140,17 +140,13 @@ void mostar_Turnos(Turno* aux){
 	cout<<"\t==============================================================="<<endl;
 
             Turno* turnoEncontrado = aux;
-            while (turnoEncontrado != NULL) {
+            while (turnoEncontrado->sig != aux) {
                 turnoEncontrado = turnoEncontrado->sig;
 
-
-            if (turnoEncontrado != NULL){
-                cout << "\n\t    " << turnoEncontrado->horaInicio<< ":00" <<"\t"<< turnoEncontrado->horaFinal << ":00"<< "\t"<< endl;
+                if (turnoEncontrado != NULL){
+                    cout << "\n\t    " << turnoEncontrado->horaInicio<< ":00" <<"\t"<< turnoEncontrado->horaFinal << ":00"<< "\t"<< endl;
+                }
             }
-
-            }
-
-
     cout << "\n";
 	system("pause");
 }
