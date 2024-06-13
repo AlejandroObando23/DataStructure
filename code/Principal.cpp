@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <conio.h>
+#include <ctime>
 #include "struct_PersonaTurno.h"
 #include "Cargar_personas.h"
 #include "Cargar_turno.h"
@@ -18,6 +19,16 @@ Persona* inicioPersona=nullptr;
 Turno* inicioTurno=nullptr;
 
 Turno* aux;
+
+int validarNumero(char numero[]){
+    for(int i = 0; i <strlen(numero);i++){
+        if(!isdigit(numero[i])){
+            cout << "Ingrese un valor entero válido" << endl;
+            return 0;
+        }
+    }
+    return 1;
+}
 
 void mostrarMenuPrincipal(int opcionActual)
 {
@@ -47,22 +58,22 @@ void mostrarMenuPrincipal(int opcionActual)
         switch(i)
         {
         case 1:
-            cout << "\t1. Agregar Turno" << endl;
+            cout << "\t1. Administrador" << endl;
             break;
         case 2:
-            cout << "\t2. Modificar Turno" << endl;
+            cout << "\t2. Registrar Asistencia" << endl;
             break;
         case 3:
-            cout << "\t3. Registrar Asistencia" << endl;
+            cout << "\t3. Siguiente Turno" << endl;
             break;
         case 4:
-            cout << "\t4. Ver lista de Personas" << endl;
+            cout << "\t4. Asignar Paciente" << endl;
             break;
         case 5:
-            cout << "\t5. Ver lista de Turnos" << endl;
+            cout << "\t5. Ver Turnos" << endl;
             break;
         case 6:
-            cout << "\t6. Siguiente Turno"<< endl;
+            cout << "\t6. Ver Doctores"<< endl;
             break;
         case 7:
             cout << "\t7. Salir" << endl;
@@ -242,11 +253,81 @@ void agregarTurno()
     system("pause");
 }
 
+void registrarAsistencia(int op){
+    time_t now = time(0);
+    tm* time = localtime(&now);
+    string mes;
+    string id, nombre, apellido, asistencia;
+    ofstream nuevoRegistro;
+
+    cout << "Ingrese su id para registrar: ";
+    cin >> id;
+
+    encontrarDoctor(id, nombre, apellido);
+
+    switch(op){
+        case 1:
+            asistencia = "Entrada:";
+            break;
+        case 2:
+            asistencia = "Salida:";
+            break;
+    }
+
+    nuevoRegistro.open("RegistroAsistencia.txt", ios::app);
+    if (nuevoRegistro.fail()) {
+        cout << "No se pudo abrir el archivo correctamente" << endl;
+        exit(1);
+    }
+
+    nuevoRegistro << "\n" << time->tm_mday << "/" << time->tm_mon+1 <<"/" << 1900+time->tm_year << "\t" << nombre << "\t" << apellido << "\t" << asistencia << "\t" << time->tm_hour << ":" << time->tm_min << ":" << time->tm_sec;
+    cout<<"\n-----Se ha registrado la asistencia correctamente-------\n";
+    nuevoRegistro.close();
+    system("pause");
+}
+
+int menuAdmin(){
+    int n, N;
+    char validarN[2];
+    cout << "\t============================" << endl;
+    cout << "\t1.- Asignar Doctor al Turno" << endl;
+    cout << "\t2.- Modificar Turno" << endl;
+    cout << "\t3.- Regresar" << endl;
+    cout << "\t============================" << endl;
+    do{
+        cin >> validarN;
+        N = validarNumero(validarN);
+        if(N == 1){
+            n = atoi(validarN);
+        }
+    }while(N == 0);
+
+    return n;
+}
+
+int menuAsistencia(){
+    int n, N;
+    char validarN[2];
+    cout << "\t============================" << endl;
+    cout << "\t1.- Registrar Entrada" << endl;
+    cout << "\t2.- Registrar Salida" << endl;
+    cout << "\t3.- Regresar" << endl;
+    cout << "\t============================" << endl;
+    do{
+        cin >> validarN;
+        N = validarNumero(validarN);
+        if(N == 1){
+            n = atoi(validarN);
+        }
+    }while(N == 0);
+    return n;
+}
+
 int main()
 {
 
     bool salir = false;
-    int opcion;
+    int opcion, op, op1;
 
     cargar_personas(inicioPersona);
     cargar_turno(inicioTurno);
@@ -258,33 +339,50 @@ int main()
         switch(opcion)
         {
         case 1:
-            cout<<"-----Agregar Turno----"<<endl;
+            cout<<"\t-----Administrador----"<<endl;
             pedirPin();
-            agregarTurno();
+            op = menuAdmin();
+            switch(op){
+                case 1:
+                    agregarTurno();
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+            }
             break;
         case 2:
-            cout<<"-----Modificar Turno----"<<endl;
-            pedirPin();
+            cout<<"\t-----Registrar Asistencia----"<<endl;
+            op1 = menuAsistencia();
+            switch(op1){
+                case 1:
+                    registrarAsistencia(1);
+                    break;
+                case 2:
+                    registrarAsistencia(2);
+                    break;
+                case 3:
+                    break;
+            }
+            break;
+        case 3:
+            aux = aux->sig;
             break;
         case 4:
-            mostar_Personas(inicioPersona);
+            cout<<"\t-----Asignar Paciente----"<<endl;
             break;
         case 5:
             mostar_Turnos(inicioTurno);
             break;
         case 6:
-            aux = aux->sig;
+            mostar_Personas(inicioPersona);
             break;
-
-
         case 7:
             cout<<"Saliendo del programa...";
             salir = true;
             break;
         }
-
-
-
     }
     while(!salir);
 
