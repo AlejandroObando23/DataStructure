@@ -14,114 +14,10 @@
 
 using namespace std;
 
-void cargar_personas(Persona*& lista);
-int escogerOpcion();
-void mostrarMenuPrincipal(int opcionActual);
-void mostar_Personas(Persona* aux);
-void mostar_Turnos(Turno* aux);
-void agregarTurno();
-void encontrarDoctor(string idDoctor, string& nombre, string& apellido);
-
 Persona* inicioPersona=nullptr;
 Turno* inicioTurno=nullptr;
 
 Turno* aux;
-
-int main()
-{
-
-    bool salir = false;
-    int opcion;
-
-    cargar_personas(inicioPersona);
-    cargar_turno(inicioTurno);
-    aux = inicioTurno;
-    do
-    {
-        opcion = escogerOpcion();
-
-        switch(opcion)
-        {
-        case 1:
-            cout<<"-----Agregar Turno----"<<endl;
-            pedirPin();
-            agregarTurno();
-            break;
-        case 2:
-            cout<<"-----Modificar Turno----"<<endl;
-            pedirPin();
-            break;
-        case 4:
-            mostar_Personas(inicioPersona);
-            break;
-        case 5:
-            mostar_Turnos(inicioTurno);
-            break;
-        case 6:
-            aux = aux->sig;
-            break;
-
-
-        case 7:
-            cout<<"Saliendo del programa...";
-            salir = true;
-            break;
-        }
-
-
-
-    }
-    while(!salir);
-
-    return 0;
-}
-
-int escogerOpcion()
-{
-    int opcionActual=1;
-    while(1)
-    {
-        system("cls");
-        mostrarMenuPrincipal(opcionActual);
-        char tecla =_getch();
-        switch(tecla)
-        {
-        case 72:
-            opcionActual=(opcionActual>1)?opcionActual-1:7;
-            break;
-        case 80:
-            opcionActual=opcionActual<7?opcionActual+1:1;
-            break;
-        case 13:
-            system("cls");
-            switch(opcionActual)
-            {
-            case 1:
-                return 1;
-                break;
-            case 2:
-                return 2;
-                break;
-            case 3:
-                return 3;
-                break;
-            case 4:
-                return 4;
-                break;
-            case 5:
-                return 5;
-                break;
-            case 6:
-                return 6;
-                break;
-            case 7:
-                return 7;
-                break;
-            };
-            break;
-        }
-    }
-}
 
 void mostrarMenuPrincipal(int opcionActual)
 {
@@ -177,6 +73,52 @@ void mostrarMenuPrincipal(int opcionActual)
     cout << "\t===========================" << endl;
 }
 
+int escogerOpcion()
+{
+    int opcionActual=1;
+    while(1)
+    {
+        system("cls");
+        mostrarMenuPrincipal(opcionActual);
+        char tecla =_getch();
+        switch(tecla)
+        {
+        case 72:
+            opcionActual=(opcionActual>1)?opcionActual-1:7;
+            break;
+        case 80:
+            opcionActual=opcionActual<7?opcionActual+1:1;
+            break;
+        case 13:
+            system("cls");
+            switch(opcionActual)
+            {
+            case 1:
+                return 1;
+                break;
+            case 2:
+                return 2;
+                break;
+            case 3:
+                return 3;
+                break;
+            case 4:
+                return 4;
+                break;
+            case 5:
+                return 5;
+                break;
+            case 6:
+                return 6;
+                break;
+            case 7:
+                return 7;
+                break;
+            };
+            break;
+        }
+    }
+}
 
 void mostar_Turnos(Turno* aux)
 {
@@ -220,6 +162,24 @@ void mostar_Personas(Persona* aux)
     }
     cout << "\n";
     system("pause");
+}
+
+void encontrarDoctor(string idDoctor, string& nombre, string& apellido)
+{
+    Persona* doctor = inicioPersona;
+    while (doctor != nullptr)
+    {
+        if (doctor->id == idDoctor)
+        {
+            nombre = doctor->nombre;
+            apellido = doctor->apellido;
+            return;
+        }
+        doctor = doctor->sig;
+    }
+    nombre = "";
+    apellido = "";
+    cout << "Error: El doctor con ID " << idDoctor << " no ha sido registrado." << endl;
 }
 
 void agregarTurno()
@@ -281,22 +241,55 @@ void agregarTurno()
     }
     system("pause");
 }
-void encontrarDoctor(string idDoctor, string& nombre, string& apellido)
+
+int main()
 {
-    Persona* doctor = inicioPersona;
-    while (doctor != nullptr)
+
+    bool salir = false;
+    int opcion;
+
+    cargar_personas(inicioPersona);
+    cargar_turno(inicioTurno);
+    aux = inicioTurno;
+    do
     {
-        if (doctor->id == idDoctor)
+        opcion = escogerOpcion();
+
+        switch(opcion)
         {
-            nombre = doctor->nombre;
-            apellido = doctor->apellido;
-            return;
+        case 1:
+            cout<<"-----Agregar Turno----"<<endl;
+            pedirPin();
+            agregarTurno();
+            break;
+        case 2:
+            cout<<"-----Modificar Turno----"<<endl;
+            pedirPin();
+            break;
+        case 4:
+            mostar_Personas(inicioPersona);
+            break;
+        case 5:
+            mostar_Turnos(inicioTurno);
+            break;
+        case 6:
+            aux = aux->sig;
+            break;
+
+
+        case 7:
+            cout<<"Saliendo del programa...";
+            salir = true;
+            break;
         }
-        doctor = doctor->sig;
+
+
+
     }
-    nombre = "";
-    apellido = "";
-    cout << "Error: El doctor con ID " << idDoctor << " no ha sido registrado." << endl;
+    while(!salir);
+
+    return 0;
 }
+
 
 
