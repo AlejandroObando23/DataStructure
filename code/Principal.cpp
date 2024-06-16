@@ -48,7 +48,7 @@ void mostrarMenuPrincipal(int opcionActual)
 
     cout << "\n\tSeleccione una opcion:\n" << endl;
     cout << "\t===========================" << endl;
-    for(int i=1; i<=7; i++)
+    for(int i=1; i<=8; i++)
     {
         if(i==opcionActual)
         {
@@ -80,7 +80,10 @@ void mostrarMenuPrincipal(int opcionActual)
             cout << "\t6. Ver Doctores"<< endl;
             break;
         case 7:
-            cout << "\t7. Salir" << endl;
+            cout << "\t7. Terminar día" << endl;
+            break;
+        case 8:
+            cout << "\t8. Salir" << endl;
             break;
         }
     }
@@ -99,10 +102,10 @@ int escogerOpcion()
         switch(tecla)
         {
         case 72:
-            opcionActual=(opcionActual>1)?opcionActual-1:7;
+            opcionActual=(opcionActual>1)?opcionActual-1:8;
             break;
         case 80:
-            opcionActual=opcionActual<7?opcionActual+1:1;
+            opcionActual=opcionActual<8?opcionActual+1:1;
             break;
         case 13:
             system("cls");
@@ -335,6 +338,7 @@ void asignarPaciente(Turno* inicioTurno)
              << turnoSeleccionado->horaInicio << ":00" << endl;
 
         turnoSeleccionado->paciente = paciente;
+        guardarTurnoPaciente<Turno>(inicioTurno);
 
         validar = false;
     }
@@ -510,6 +514,43 @@ void cargarTurnoDoctor(){
 	return;
 }
 
+void cargarTurnoPaciente(){
+	ifstream archivo;
+	char verificar;
+	int numTurno;
+	int contador = 1;
+	Persona paciente;
+	Turno* aux1 = inicioTurno;
+
+	archivo.open("TurnosPaciente.txt",ios::in);
+	if(archivo.fail()){
+		cout<<"No se pudo abrir el archivo";
+		exit (1);
+	}
+
+	while(!archivo.eof()){
+        archivo>>verificar;
+        if(verificar != 'v'){
+            numTurno = verificar - 0;
+            archivo>>paciente.id;
+            archivo>>paciente.nombre;
+            archivo>>paciente.apellido;
+            do{
+                if(contador == numTurno){
+                    aux1->paciente = paciente;
+                }
+                aux1 = aux1->sig;
+                contador++;
+            }while(contador-1 != numTurno);
+        }else{
+            break;
+        }
+	}
+
+	archivo.close();
+	return;
+}
+
 int main()
 {
 
@@ -519,6 +560,7 @@ int main()
     cargar_personas(inicioPersona);
     cargar_turno(inicioTurno);
     cargarTurnoDoctor();
+    cargarTurnoPaciente();
     aux = inicioTurno;
     do
     {
@@ -571,6 +613,9 @@ int main()
             mostar_Personas(inicioPersona);
             break;
         case 7:
+            vaciarPacientes(inicioTurno);
+            break;
+        case 8:
             cout<<"Saliendo del programa...";
             salir = true;
             break;
