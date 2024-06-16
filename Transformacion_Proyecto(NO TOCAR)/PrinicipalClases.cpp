@@ -11,16 +11,20 @@ void mostrarMenuPrincipal(int opcionActual);
     ClasePersona ps;
     ClaseTurno to;
     Turno* circular;
+    Persona* doc;
+int menuAsistencia();
+int menuAdmin();
+int validarNumero(char numero[]);
 int main()
-
 {
     bool salir = false;
     ps.cargar_personas();
     to.cargar_turno();
     circular=to.cabeza;
+    doc =ps.cabeza;
 
+int opcion, op, op1;
 
-    int opcion;
 
     do
     {
@@ -29,10 +33,20 @@ int main()
         switch(opcion)
         {
         case 1:
-            cout<<"-----Agregar Turno----"<<endl;
-            //   pedirPin();
-            //   agregarTurno();
-            break;
+            cout<<"\t-----Administrador----"<<endl;
+            pedirPin();
+            op = menuAdmin();
+            switch(op)
+            {
+            case 1:
+                to.agregarTurno(doc);
+                break;
+            case 2:
+                to.modificarTurno();
+                break;
+            case 3:
+                break;
+            }
         case 2:
             cout<<"-----Modificar Turno----"<<endl;
             pedirPin();
@@ -156,4 +170,65 @@ void mostrarMenuPrincipal(int opcionActual)
     printf("%s",ANSI_BACKGROUND_RESET);
     cout << "\t===========================" << endl;
 }
+int menuAsistencia()
+{
+    int n, N;
+    char validarN[2];
+    cout << "\t============================" << endl;
+    cout << "\t1.- Registrar Entrada" << endl;
+    cout << "\t2.- Registrar Salida" << endl;
+    cout << "\t3.- Regresar" << endl;
+    cout << "\t============================" << endl;
+    do
+    {
+        cin >> validarN;
+        N = validarNumero(validarN);
+        if(N == 1)
+        {
+            n = atoi(validarN);
+        }
+    }
+    while(N == 0);
+    return n;
+}
+int menuAdmin()
+{
+    int n, N;
+    char validarN[2];
+    cout << "\t============================" << endl;
+    cout << "\t1.- Asignar Doctor al Turno" << endl;
+    cout << "\t2.- Modificar Turno" << endl;
+    cout << "\t3.- Regresar" << endl;
+    cout << "\t============================" << endl;
+    do
+    {
+        cin >> validarN;
+        N = validarNumero(validarN);
+        if(N == 1)
+        {
+            n = atoi(validarN);
+        }
+    }
+    while(N == 0);
+
+    return n;
+}
+
+int validarNumero(char numero[])
+{
+    for(int i = 0; i <strlen(numero); i++)
+    {
+        if(!isdigit(numero[i]))
+        {
+            cout << "Ingrese un valor entero válido" << endl;
+            return 0;
+        }
+    }
+    return 1;
+}
+
+
+
+
+
 
