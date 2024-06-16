@@ -275,6 +275,44 @@ void agregarTurno(Persona* inicioPersona, Turno* inicioTurno)
     system("pause");
 }
 
+void modificarTurno(Turno* inicioTurno) {
+    int opcion;
+    verificar_disponibilidad(inicioTurno); // Mostrar los turnos disponibles
+
+    // Solicitar al usuario que seleccione un turno
+    cout << "Seleccione el turno a modificar: ";
+    cin >> opcion;
+
+    // Encontrar el turno seleccionado
+    Turno* turnoSeleccionado = inicioTurno;
+    for (int i = 1; i < opcion && turnoSeleccionado != nullptr; ++i) {
+        turnoSeleccionado = turnoSeleccionado->sig;
+    }
+
+    // Mostrar los detalles del turno seleccionado y solicitar nuevos valores
+    if (turnoSeleccionado != nullptr) {
+        cout << "\t------------------------------------" << endl;
+        cout << "\t|        DETALLES DEL TURNO        |" << endl;
+        cout << "\t------------------------------------" << endl;
+        cout << "Hora de inicio actual: " << turnoSeleccionado->horaInicio << ":00" << endl;
+        cout << "Hora de fin actual: " << turnoSeleccionado->horaFinal << ":00" << endl;
+
+        int nuevaHoraInicio, nuevaHoraFinal;
+        cout << "Ingrese nueva hora de inicio: ";
+        cin >> nuevaHoraInicio;
+        cout << "Ingrese nueva hora de fin: ";
+        cin >> nuevaHoraFinal;
+
+        turnoSeleccionado->horaInicio = nuevaHoraInicio;
+        turnoSeleccionado->horaFinal = nuevaHoraFinal;
+
+        cout << "Turno modificado exitosamente." << endl;
+    } else {
+        cout << "Opción de turno inválida." << endl;
+    }
+    system("pause");
+}
+
 void registrarAsistencia(int op)
 {
     time_t now = time(0);
@@ -391,6 +429,7 @@ int main()
                 agregarTurno(inicioPersona,inicioTurno);
                 break;
             case 2:
+                modificarTurno(inicioTurno);
                 break;
             case 3:
                 break;
