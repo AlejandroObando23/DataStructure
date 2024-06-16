@@ -259,7 +259,9 @@ void agregarTurno(Persona* inicioPersona, Turno* inicioTurno)
                  << turnoSeleccionado->horaInicio << ":00    "
                  << turnoSeleccionado->horaFinal << ":00 " << endl;
 
-
+            turnoSeleccionado->doctor.id = doctorEncontrado->id;
+            turnoSeleccionado->doctor.nombre = doctorEncontrado->nombre;
+            turnoSeleccionado->doctor.apellido = doctorEncontrado->apellido;
         }
         else
         {
@@ -277,8 +279,7 @@ void registrarAsistencia(int op)
 {
     time_t now = time(0);
     tm* time = localtime(&now);
-    string mes;
-    string id, nombre, apellido, asistencia;
+    string id, asistencia;
     ofstream nuevoRegistro;
 
     cout << "Ingrese su id para registrar: ";
@@ -287,7 +288,7 @@ void registrarAsistencia(int op)
     Persona* doctorEncontrado = nullptr;
     encontrarDoctor(id, doctorEncontrado);
 
-    if(nombre != "" && apellido != "")
+    if(doctorEncontrado != NULL)
     {
         switch(op)
         {
@@ -306,7 +307,7 @@ void registrarAsistencia(int op)
             exit(1);
         }
 
-        nuevoRegistro << "\n" << time->tm_mday << "/" << time->tm_mon+1 <<"/" << 1900+time->tm_year << "\t" << nombre << "\t" << apellido << "\t" << asistencia << "\t" << time->tm_hour << ":" << time->tm_min << ":" << time->tm_sec;
+        nuevoRegistro << "\n" << time->tm_mday << "/" << time->tm_mon+1 <<"/" << 1900+time->tm_year << "\t" << doctorEncontrado->nombre << "\t" << doctorEncontrado->apellido << "\t\t" << asistencia << "\t" << time->tm_hour << ":" << time->tm_min << ":" << time->tm_sec;
         cout<<"\n-----Se ha registrado la asistencia correctamente-------\n";
         nuevoRegistro.close();
     }
