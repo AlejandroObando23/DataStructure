@@ -32,11 +32,13 @@ public:
 
 
 };
+
 struct Turno
 {
     int horaInicio;
     int horaFinal;
     Persona doctor;
+    Persona paciente;
     Turno* sig;
 };
 class ClaseTurno

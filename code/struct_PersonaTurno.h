@@ -12,6 +12,7 @@ struct Persona{
 struct Turno{
     int horaInicio;
     int horaFinal;
+    Persona paciente;
     Persona doctor;
     Turno* sig;
 };

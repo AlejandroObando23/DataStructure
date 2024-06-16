@@ -11,6 +11,11 @@ void imprimirInfoTurno(T* lista){
     cout << "\tHorario: " << lista->horaInicio << ":00 - " << lista->horaFinal << ":00 " << endl;
     cout << "\tEncargado: " << lista->doctor.nombre << " " << lista->doctor.apellido << endl;
     cout <<  "\tID: " << lista->doctor.id << endl;
+    if(lista->paciente.nombre != "" && lista->paciente.apellido != ""){
+        cout << "\tPaciente: " << lista->paciente.nombre << " " << lista->paciente.apellido << endl;
+    }else{
+        cout << "\tPaciente: no asignado" << endl;
+    }
     cout << "\t======================================\n" << endl;
     }
     else{

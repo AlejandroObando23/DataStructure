@@ -35,7 +35,7 @@ void mostrarMenuPrincipal(int opcionActual)
     cout << "\t\t=== Bienvenido al sistema de Turnos ===" << endl;
     if(aux != nullptr)
     {
-        imprimirInfoTurno(aux);
+        imprimirInfoTurno<Turno>(aux);
     }
     else
     {
@@ -134,21 +134,21 @@ int escogerOpcion()
 void mostar_Turnos(Turno* aux)
 {
 
-    cout<<"\t------LISTA DE Personas REGISTRADOS--------"<<endl;
+    cout<<"\t-------- LISTA DE TURNOS REGISTRADOS --------"<<endl;
     cout<<"\t==============================================================="<<endl;
     cout<<"\t| HORA INICIO | HORA LLEGADA |"<<endl;
     cout<<"\t==============================================================="<<endl;
 
     Turno* turnoEncontrado = aux;
-    while (turnoEncontrado->sig != aux)
-    {
-        turnoEncontrado = turnoEncontrado->sig;
 
+    do{
         if (turnoEncontrado != NULL)
         {
             cout << "\n\t    " << turnoEncontrado->horaInicio<< ":00" <<"\t"<< turnoEncontrado->horaFinal << ":00"<< "\t"<< endl;
         }
-    }
+        turnoEncontrado = turnoEncontrado->sig;
+
+    }while (turnoEncontrado != aux);
     cout << "\n";
     system("pause");
 }
@@ -164,12 +164,11 @@ void mostar_Personas(Persona* aux)
     Persona* alumnoEncontrado = aux;
     while (alumnoEncontrado != NULL)
     {
-        alumnoEncontrado = alumnoEncontrado->sig;
-
         if (alumnoEncontrado != NULL)
         {
             cout << "\n\t" << alumnoEncontrado->id << "\t" << alumnoEncontrado->nombre <<"\t"<< alumnoEncontrado->apellido<< "\t"<< endl;
         }
+        alumnoEncontrado = alumnoEncontrado->sig;
     }
     cout << "\n";
     system("pause");
@@ -197,8 +196,6 @@ void agregarTurno()
 {
     string idDoctor;
     string nombre, apellido;
-    cargar_turno(inicioTurno);
-    aux = inicioTurno;
 
     cout << "Ingrese el ID del Doctor: ";
     cin >> idDoctor;
@@ -264,25 +261,31 @@ void registrarAsistencia(int op){
     cin >> id;
 
     encontrarDoctor(id, nombre, apellido);
+    if(nombre != "" && apellido != ""){
+        switch(op){
+            case 1:
+                asistencia = "Entrada:";
+                break;
+            case 2:
+                asistencia = "Salida:";
+                break;
+        }
 
-    switch(op){
-        case 1:
-            asistencia = "Entrada:";
-            break;
-        case 2:
-            asistencia = "Salida:";
-            break;
+        nuevoRegistro.open("RegistroAsistencia.txt", ios::app);
+        if (nuevoRegistro.fail()) {
+            cout << "No se pudo abrir el archivo correctamente" << endl;
+            exit(1);
+        }
+
+        nuevoRegistro << "\n" << time->tm_mday << "/" << time->tm_mon+1 <<"/" << 1900+time->tm_year << "\t" << nombre << "\t" << apellido << "\t" << asistencia << "\t" << time->tm_hour << ":" << time->tm_min << ":" << time->tm_sec;
+        cout<<"\n-----Se ha registrado la asistencia correctamente-------\n";
+        nuevoRegistro.close();
+    }else{
+        cout << "\t================================" << endl;
+        cout << "\t|No se encontró el id ingresado|" << endl;
+        cout << "\t================================" << endl;
     }
 
-    nuevoRegistro.open("RegistroAsistencia.txt", ios::app);
-    if (nuevoRegistro.fail()) {
-        cout << "No se pudo abrir el archivo correctamente" << endl;
-        exit(1);
-    }
-
-    nuevoRegistro << "\n" << time->tm_mday << "/" << time->tm_mon+1 <<"/" << 1900+time->tm_year << "\t" << nombre << "\t" << apellido << "\t" << asistencia << "\t" << time->tm_hour << ":" << time->tm_min << ":" << time->tm_sec;
-    cout<<"\n-----Se ha registrado la asistencia correctamente-------\n";
-    nuevoRegistro.close();
     system("pause");
 }
 
