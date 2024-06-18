@@ -364,38 +364,33 @@ void asignarPaciente(Turno* inicioTurno)
 
 void modificarTurno(Turno* inicioTurno) {
     int opcion;
-    verificar_disponibilidad(inicioTurno); // Mostrar los turnos disponibles
-
-    // Solicitar al usuario que seleccione un turno
-    cout << "Seleccione el turno a modificar: ";
-    cin >> opcion;
-
-    // Encontrar el turno seleccionado
+    verificar_disponibilidad(inicioTurno);
+    cout<<"Seleccione el turno que desea modificar: ";
+    cin>>opcion;
     Turno* turnoSeleccionado = inicioTurno;
     for (int i = 1; i < opcion && turnoSeleccionado != nullptr; ++i) {
         turnoSeleccionado = turnoSeleccionado->sig;
     }
 
-    // Mostrar los detalles del turno seleccionado y solicitar nuevos valores
     if (turnoSeleccionado != nullptr) {
-        cout << "\t------------------------------------" << endl;
-        cout << "\t|        DETALLES DEL TURNO        |" << endl;
-        cout << "\t------------------------------------" << endl;
-        cout << "Hora de inicio actual: " << turnoSeleccionado->horaInicio << ":00" << endl;
-        cout << "Hora de fin actual: " << turnoSeleccionado->horaFinal << ":00" << endl;
+        cout<<"\t------------------------------------"<<endl;
+        cout<<"\t|        DETALLES DEL TURNO        |"<<endl;
+        cout<<"\t------------------------------------"<<endl;
+        cout<<"Hora de inicio actual: "<<turnoSeleccionado->horaInicio<< ":00" <<endl;
+        cout<<"Hora de fin actual: "<<turnoSeleccionado->horaFinal<< ":00" <<endl;
 
-        int nuevaHoraInicio, nuevaHoraFinal;
-        cout << "Ingrese nueva hora de inicio: ";
-        cin >> nuevaHoraInicio;
-        cout << "Ingrese nueva hora de fin: ";
-        cin >> nuevaHoraFinal;
+        int nuevaHoraInicio,nuevaHoraFinal;
+        cout<<"Ingrese nueva hora de inicio: ";
+        cin>>nuevaHoraInicio;
+        cout<<"Ingrese nueva hora de fin: ";
+        cin>>nuevaHoraFinal;
 
         turnoSeleccionado->horaInicio = nuevaHoraInicio;
         turnoSeleccionado->horaFinal = nuevaHoraFinal;
 
-        cout << "Turno modificado exitosamente." << endl;
-    } else {
-        cout << "Opción de turno inválida." << endl;
+        cout<<"Turno modificado exitosamente."<<endl;
+    }else{
+        cout<<"Opción de turno invalida."<<endl;
     }
     system("pause");
 }
