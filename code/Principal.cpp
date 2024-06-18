@@ -395,20 +395,6 @@ void modificarTurno(Turno* inicioTurno) {
     system("pause");
 }
 
-void seleccionarTurno(Turno*& turnoSeleccionado) {
-verificar_disponibilidad(inicioTurno); // Mostrar los turnos disponibles
-int opcion;
-cout << "Seleccione el turno que desea modificar: ";
-cin >> opcion;
-turnoSeleccionado = inicioTurno;
-for (int i = 1; i < opcion && turnoSeleccionado != nullptr; ++i) {
-    turnoSeleccionado = turnoSeleccionado->sig;
-}
-
-if (turnoSeleccionado == nullptr) {
-    cout << "Opción de turno inválida." << endl;
-}
-}
 
 void seleccionarNuevoDoctor(Persona*& doctorSeleccionado) {
     string idDoctor;
@@ -425,57 +411,54 @@ void seleccionarNuevoDoctor(Persona*& doctorSeleccionado) {
 
 void cambiarDoctorEnTurno(Turno* inicioTurno, Persona* inicioPersona) {
 int opcionTurno;
-cout << "Seleccione el turno que desea modificar: ";
-cin >> opcionTurno;
+    cout<<"Seleccione el turno que desea modificar: ";
+    cin>>opcionTurno;
 
-// Encontrar el turno seleccionado
 Turno* turnoSeleccionado = inicioTurno;
-for (int i = 1; i < opcionTurno && turnoSeleccionado != nullptr; ++i) {
-    turnoSeleccionado = turnoSeleccionado->sig;
-}
-
-// Mostrar los doctores disponibles
+    for(int i = 1; i < opcionTurno && turnoSeleccionado != nullptr; ++i) {
+        turnoSeleccionado = turnoSeleccionado->sig;
+    }
 mostar_Personas(inicioPersona);
 
-string idDoctor;
-cout << "Ingrese el ID del nuevo doctor: ";
-cin >> idDoctor;
+    string idDoctor;
+    cout<<"Ingrese el ID del nuevo doctor: ";
+    cin>>idDoctor;
 
 Persona* doctorEncontrado = nullptr;
 encontrarDoctor(idDoctor, doctorEncontrado);
 
-if (doctorEncontrado != nullptr && turnoSeleccionado != nullptr) {
-    turnoSeleccionado->doctor.id = doctorEncontrado->id;
-    turnoSeleccionado->doctor.nombre = doctorEncontrado->nombre;
-    turnoSeleccionado->doctor.apellido = doctorEncontrado->apellido;
+    if(doctorEncontrado != nullptr && turnoSeleccionado != nullptr){
+        turnoSeleccionado->doctor.id = doctorEncontrado->id;
+        turnoSeleccionado->doctor.nombre = doctorEncontrado->nombre;
+        turnoSeleccionado->doctor.apellido = doctorEncontrado->apellido;
 
-    cout << "Doctor asignado exitosamente al turno." << endl;
-    guardarTurnoDoctor<Turno>(inicioTurno);
-} else {
-    cout << "Turno o doctor no válido." << endl;
+        cout<<"Doctor asignado exitosamente al turno."<<endl;
+        guardarTurnoDoctor<Turno>(inicioTurno);
+    }else
+{
+    cout<<"Turno o doctor no válido."<<endl;
+}
+    system("pause");
 }
 
-system("pause");
-}
 
-//Mostrar doctores y el turno que tienen
-void mostrarDoctoresAsignados(Turno* inicioTurno) {
-cout << "\t----------------- DOCTORES ASIGNADOS A TURNOS -----------------" << endl;
-cout << "\t===============================================================" << endl;
-cout << "\t| TURNO  |  HORA INICIO |    HORA FINAL |    DOCTOR  |" << endl;
-cout << "\t===============================================================" << endl;
+void mostrarDoctoresAsignados(Turno* inicioTurno){
+cout<<"\t----------------- DOCTORES ASIGNADOS A TURNOS -----------------"<<endl;
+cout<<"\t==============================================================="<<endl;
+cout<<"\t| TURNO  |  HORA INICIO |    HORA FINAL |    DOCTOR  |"<<endl;
+cout<<"\t==============================================================="<<endl;
 Turno* turnoActual = inicioTurno;
-int turnoNumero = 1;
+int turnoNumero =1;
 
-do {
-    cout << "\t  " << turnoNumero << "\t      " << turnoActual->horaInicio << ":00"
-         << "\t       " << turnoActual->horaFinal << ":00"
-         << "\t  " << turnoActual->doctor.nombre << " " << turnoActual->doctor.apellido << endl;
+do{
+    cout<< "\t  " << turnoNumero << "\t      " << turnoActual->horaInicio << ":00"
+        << "\t       " << turnoActual->horaFinal << ":00"
+        << "\t  " << turnoActual->doctor.nombre << " " << turnoActual->doctor.apellido<<endl;
     turnoActual = turnoActual->sig;
     turnoNumero++;
-} while (turnoActual != inicioTurno);
+}while(turnoActual != inicioTurno);
 
-cout << "\n";
+cout<<"\n";
 system("pause");
 }
 
