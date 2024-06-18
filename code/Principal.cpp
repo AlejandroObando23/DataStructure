@@ -228,13 +228,12 @@ void verificar_disponibilidad(Turno* aux)
 
 void agregarTurno(Persona* inicioPersona, Turno* inicioTurno)
 {
-    string idDoctor,nombre, apellido;
+    string idDoctor;
     int opcion;
     bool validar = false;
 
     cout << "Ingrese el ID del Doctor: ";
     cin >> idDoctor;
-
 
     Persona* doctorEncontrado = nullptr;
     encontrarDoctor(idDoctor, doctorEncontrado);
@@ -255,60 +254,54 @@ void agregarTurno(Persona* inicioPersona, Turno* inicioTurno)
             verificar_disponibilidad(inicioTurno);
 
             // Solicitar al usuario que seleccione un turno
-            char validarN[2];
-            int N;
+            cout << "Seleccione un turno: ";
+            cin >> opcion;
 
-            do
-            {
-                cout << "Seleccione un turno: ";
-                cin >> validarN;
-                N = validarNumero(validarN);
-                if(N==1)
-                {
-                    opcion = atoi(validarN);
-                }
-            }
-            while(N == 0);
             // Encontrar el turno seleccionado
             Turno* turnoSeleccionado = inicioTurno;
-            for (int i = 1; i < opcion && turnoSeleccionado != nullptr; ++i)
+            int contador = 1;
+            while (turnoSeleccionado != nullptr && contador < opcion)
             {
                 turnoSeleccionado = turnoSeleccionado->sig;
+                contador++;
             }
 
             // Mostrar los detalles del turno seleccionado
-            if (turnoSeleccionado != nullptr && turnoSeleccionado->doctor.id == "")
+            if (turnoSeleccionado != nullptr)
             {
-                cout << "\t------------------------------------" << endl;
-                cout << "\t|        DETALLES DEL TURNO        |" << endl;
-                cout << "\t------------------------------------" << endl;
-                cout<<endl;
-                cout << "\t----------------------------------------------" << endl;
-                cout << "\t| ID    | APELLIDO | NOMBRE  | INICIO  | FIN |" << endl;
-                cout << "\t----------------------------------------------" << endl;
-                cout << "\t " << doctorEncontrado->id << "  "
-                     << doctorEncontrado->apellido << "  "
-                     << doctorEncontrado->nombre << "  "
-                     << turnoSeleccionado->horaInicio << ":00    "
-                     << turnoSeleccionado->horaFinal << ":00 " << endl;
+                if (turnoSeleccionado->doctor.id == "")
+                {
+                    cout << "\t------------------------------------" << endl;
+                    cout << "\t|        DETALLES DEL TURNO        |" << endl;
+                    cout << "\t------------------------------------" << endl;
+                    cout << "\t----------------------------------------------" << endl;
+                    cout << "\t| ID    | APELLIDO | NOMBRE  | INICIO  | FIN |" << endl;
+                    cout << "\t----------------------------------------------" << endl;
+                    cout << "\t " << doctorEncontrado->id << "  "
+                         << doctorEncontrado->apellido << "  "
+                         << doctorEncontrado->nombre << "  "
+                         << turnoSeleccionado->horaInicio << ":00    "
+                         << turnoSeleccionado->horaFinal << ":00 " << endl;
 
-                turnoSeleccionado->doctor.id = doctorEncontrado->id;
-                turnoSeleccionado->doctor.nombre = doctorEncontrado->nombre;
-                turnoSeleccionado->doctor.apellido = doctorEncontrado->apellido;
+                    turnoSeleccionado->doctor.id = doctorEncontrado->id;
+                    turnoSeleccionado->doctor.nombre = doctorEncontrado->nombre;
+                    turnoSeleccionado->doctor.apellido = doctorEncontrado->apellido;
 
-                guardarTurnoDoctor<Turno>(inicioTurno);
-                validar = false;
-            }
-            else if(turnoSeleccionado->doctor.id != ""){
-                cout << "El turno ya se encuentra ocupado por: " << endl;
-                cout << "ID registrado : " << turnoSeleccionado->doctor.id << endl;
-                cout << "NOMBRE        : " << turnoSeleccionado->doctor.nombre << endl;
-                cout << "APELLIDO      : " << turnoSeleccionado->doctor.apellido << endl;
-                validar = true;
+                    guardarTurnoDoctor<Turno>(inicioTurno);
+                    validar = false;
+                }
+                else
+                {
+                    cout << "El turno seleccionado ya esta ocupado por: " << endl;
+                    cout << "ID registrado : " << turnoSeleccionado->doctor.id << endl;
+                    cout << "NOMBRE        : " << turnoSeleccionado->doctor.nombre << endl;
+                    cout << "APELLIDO      : " << turnoSeleccionado->doctor.apellido << endl;
+                    validar = true;
+                }
             }
             else
             {
-                cout << "Opción de turno inválida" << endl;
+                cout << "Opcion de turno invalida" << endl;
                 validar = true;
             }
         }
@@ -317,11 +310,11 @@ void agregarTurno(Persona* inicioPersona, Turno* inicioTurno)
     else
     {
         cout << "No se encontro ningun doctor con ese ID." << endl;
-
     }
 
     system("pause");
 }
+
 
 void asignarPaciente(Turno* inicioTurno)
 {
