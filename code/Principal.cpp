@@ -83,8 +83,12 @@ void mostrarMenuPrincipal(int opcionActual)
             cout << "\t7. Terminar día" << endl;
             break;
         case 8:
-            cout << "\t8. Salir" << endl;
+            cout << "\t8. Doctores en turno" << endl;
             break;
+        case 9:
+            cout << "\t9. Salir" << endl;
+            break;
+
         }
     }
     printf("%s",ANSI_BACKGROUND_RESET);
@@ -131,6 +135,9 @@ int escogerOpcion()
                 break;
             case 7:
                 return 7;
+                break;
+            case 8:
+                return 8;
                 break;
             };
             break;
@@ -390,6 +397,72 @@ void modificarTurno(Turno* inicioTurno) {
     system("pause");
 }
 
+void seleccionarTurno(Turno*& turnoSeleccionado) {
+verificar_disponibilidad(inicioTurno); // Mostrar los turnos disponibles
+int opcion;
+cout << "Seleccione el turno que desea modificar: ";
+cin >> opcion;
+turnoSeleccionado = inicioTurno;
+for (int i = 1; i < opcion && turnoSeleccionado != nullptr; ++i) {
+    turnoSeleccionado = turnoSeleccionado->sig;
+}
+
+if (turnoSeleccionado == nullptr) {
+    cout << "Opción de turno inválida." << endl;
+}
+}
+
+void seleccionarNuevoDoctor(Persona*& doctorSeleccionado) {
+    //mostar_Personas(inicioPersona); // Mostrar la lista de médicos
+    string idDoctor;
+    cout << "Ingrese el ID del nuevo doctor: ";
+    cin >> idDoctor;
+
+    encontrarDoctor(idDoctor, doctorSeleccionado);
+
+    if (doctorSeleccionado == nullptr) {
+        cout << "No se encontró ningún doctor con ese ID." << endl;
+    }
+}
+
+void cambiarDoctorEnTurno() {
+Turno* turnoSeleccionado = nullptr;
+Persona* doctorSeleccionado = nullptr;
+seleccionarTurno(turnoSeleccionado);
+if (turnoSeleccionado != nullptr) {
+    seleccionarNuevoDoctor(doctorSeleccionado);
+    if (doctorSeleccionado != nullptr) {
+        turnoSeleccionado->doctor.id = doctorSeleccionado->id;
+        turnoSeleccionado->doctor.nombre = doctorSeleccionado->nombre;
+        turnoSeleccionado->doctor.apellido = doctorSeleccionado->apellido;
+        guardarTurnoDoctor<Turno>(inicioTurno);
+        cout << "Doctor asignado exitosamente al turno." << endl;
+    }
+}
+system("pause");
+}
+
+//Mostrar doctores y el turno que tienen
+void mostrarDoctoresAsignados(Turno* inicioTurno) {
+cout << "\t-------- DOCTORES ASIGNADOS A TURNOS --------" << endl;
+cout << "\t===============================================================" << endl;
+cout << "\t| TURNO | HORA INICIO | HORA FINAL | DOCTOR |" << endl;
+cout << "\t===============================================================" << endl;
+Turno* turnoActual = inicioTurno;
+int turnoNumero = 1;
+
+do {
+    cout << "\t  " << turnoNumero << "\t      " << turnoActual->horaInicio << ":00"
+         << "\t       " << turnoActual->horaFinal << ":00"
+         << "\t  " << turnoActual->doctor.nombre << " " << turnoActual->doctor.apellido << endl;
+    turnoActual = turnoActual->sig;
+    turnoNumero++;
+} while (turnoActual != inicioTurno);
+
+cout << "\n";
+system("pause");
+}
+
 void registrarAsistencia(int op){
     time_t now = time(0);
     tm* time = localtime(&now);
@@ -442,7 +515,8 @@ int menuAdmin()
     cout << "\t============================" << endl;
     cout << "\t1.- Asignar Doctor al Turno" << endl;
     cout << "\t2.- Modificar Turno" << endl;
-    cout << "\t3.- Regresar" << endl;
+    cout << "\t3.- Cambiar Doctor en Turno" << endl;
+    cout << "\t4.- Regresar" << endl;
     cout << "\t============================" << endl;
     do
     {
@@ -579,8 +653,11 @@ int main()
                 break;
             case 2:
                 modificarTurno(inicioTurno);
+
                 break;
             case 3:
+                mostrarDoctoresAsignados(inicioTurno);
+                cambiarDoctorEnTurno();
                 break;
             }
             break;
@@ -616,9 +693,12 @@ int main()
             vaciarPacientes(inicioTurno);
             break;
         case 8:
+
+            mostrarDoctoresAsignados(inicioTurno);
+            break;
+        case 9:
             cout<<"Saliendo del programa...";
             salir = true;
-            break;
         }
     }
     while(!salir);
