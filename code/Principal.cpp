@@ -80,10 +80,10 @@ void mostrarMenuPrincipal(int opcionActual)
             cout << "\t6. Ver Doctores"<< endl;
             break;
         case 7:
-            cout << "\t7. Terminar día" << endl;
+            cout << "\t7. Doctores en turno" << endl;
             break;
         case 8:
-            cout << "\t8. Doctores en turno" << endl;
+            cout << "\t8. Terminar dia" << endl;
             break;
         case 9:
             cout << "\t9. Salir" << endl;
@@ -298,7 +298,7 @@ void asignarPaciente(Turno* inicioTurno)
     int opcion;
     bool validar;
 
-    cout << "Ingrese la cédula del paciente: ";
+    cout << "Ingrese la cedula del paciente: ";
     cin >> paciente.id;
 
     cout << "Ingrese el nombre del paciente (Ej. Marco): ";
@@ -310,7 +310,7 @@ void asignarPaciente(Turno* inicioTurno)
     cout << "\t------------------------------------" << endl;
     cout << "\t|   DATOS PERSONALES DEL PACIENTE  |" << endl;
     cout << "\t------------------------------------" << endl;
-    cout << "CÉDULA        : " << paciente.id << endl;
+    cout << "CEDULA        : " << paciente.id << endl;
     cout << "NOMBRE        : " << paciente.nombre << endl;
     cout << "APELLIDO      : " << paciente.apellido << endl;
     cout << endl;
@@ -338,7 +338,7 @@ void asignarPaciente(Turno* inicioTurno)
         cout << "\t------------------------------------" << endl;
         cout<<endl;
         cout << "\t------------------------------------------------------------------------------" << endl;
-        cout << "\t|      CÉDULA      |        PACIENTE      |       DOCTOR      |      HORA    |" << endl;
+        cout << "\t|      CEDULA      |        PACIENTE      |       DOCTOR      |      HORA    |" << endl;
         cout << "\t------------------------------------------------------------------------------" << endl;
         cout << "\t " << paciente.id << "\t"
              << paciente.nombre << "  "
@@ -416,7 +416,6 @@ if (turnoSeleccionado == nullptr) {
 }
 
 void seleccionarNuevoDoctor(Persona*& doctorSeleccionado) {
-    //mostar_Personas(inicioPersona); // Mostrar la lista de médicos
     string idDoctor;
     cout << "Ingrese el ID del nuevo doctor: ";
     cin >> idDoctor;
@@ -428,28 +427,47 @@ void seleccionarNuevoDoctor(Persona*& doctorSeleccionado) {
     }
 }
 
-void cambiarDoctorEnTurno() {
-Turno* turnoSeleccionado = nullptr;
-Persona* doctorSeleccionado = nullptr;
-seleccionarTurno(turnoSeleccionado);
-if (turnoSeleccionado != nullptr) {
-    seleccionarNuevoDoctor(doctorSeleccionado);
-    if (doctorSeleccionado != nullptr) {
-        turnoSeleccionado->doctor.id = doctorSeleccionado->id;
-        turnoSeleccionado->doctor.nombre = doctorSeleccionado->nombre;
-        turnoSeleccionado->doctor.apellido = doctorSeleccionado->apellido;
-        guardarTurnoDoctor<Turno>(inicioTurno);
-        cout << "Doctor asignado exitosamente al turno." << endl;
-    }
+
+void cambiarDoctorEnTurno(Turno* inicioTurno, Persona* inicioPersona) {
+int opcionTurno;
+cout << "Seleccione el turno que desea modificar: ";
+cin >> opcionTurno;
+
+// Encontrar el turno seleccionado
+Turno* turnoSeleccionado = inicioTurno;
+for (int i = 1; i < opcionTurno && turnoSeleccionado != nullptr; ++i) {
+    turnoSeleccionado = turnoSeleccionado->sig;
 }
+
+// Mostrar los doctores disponibles
+mostar_Personas(inicioPersona);
+
+string idDoctor;
+cout << "Ingrese el ID del nuevo doctor: ";
+cin >> idDoctor;
+
+Persona* doctorEncontrado = nullptr;
+encontrarDoctor(idDoctor, doctorEncontrado);
+
+if (doctorEncontrado != nullptr && turnoSeleccionado != nullptr) {
+    turnoSeleccionado->doctor.id = doctorEncontrado->id;
+    turnoSeleccionado->doctor.nombre = doctorEncontrado->nombre;
+    turnoSeleccionado->doctor.apellido = doctorEncontrado->apellido;
+
+    cout << "Doctor asignado exitosamente al turno." << endl;
+    guardarTurnoDoctor<Turno>(inicioTurno);
+} else {
+    cout << "Turno o doctor no válido." << endl;
+}
+
 system("pause");
 }
 
 //Mostrar doctores y el turno que tienen
 void mostrarDoctoresAsignados(Turno* inicioTurno) {
-cout << "\t-------- DOCTORES ASIGNADOS A TURNOS --------" << endl;
+cout << "\t----------------- DOCTORES ASIGNADOS A TURNOS -----------------" << endl;
 cout << "\t===============================================================" << endl;
-cout << "\t| TURNO | HORA INICIO | HORA FINAL | DOCTOR |" << endl;
+cout << "\t| TURNO  |  HORA INICIO |    HORA FINAL |    DOCTOR  |" << endl;
 cout << "\t===============================================================" << endl;
 Turno* turnoActual = inicioTurno;
 int turnoNumero = 1;
@@ -515,14 +533,16 @@ int menuAdmin()
 {
     int n, N;
     char validarN[2];
-    cout << "\t============================" << endl;
+    cout<<"\t==========ADMINISTRADOR=========="<<endl;
+    cout << "\t=================================" << endl;
     cout << "\t1.- Asignar Doctor al Turno" << endl;
     cout << "\t2.- Modificar Turno" << endl;
     cout << "\t3.- Cambiar Doctor en Turno" << endl;
     cout << "\t4.- Regresar" << endl;
-    cout << "\t============================" << endl;
+    cout << "\t=================================" << endl;
     do
     {
+        cout<< "\nSeleccione una opcion: ";
         cin >> validarN;
         N = validarNumero(validarN);
         if(N == 1)
@@ -544,6 +564,7 @@ int menuAsistencia()
     cout << "\t2.- Registrar Salida" << endl;
     cout << "\t3.- Regresar" << endl;
     cout << "\t============================" << endl;
+    cout<<"Seleccione una opcion: ";
     do
     {
         cin >> validarN;
@@ -646,8 +667,9 @@ int main()
         switch(opcion)
         {
         case 1:
-            cout<<"\t-----Administrador----"<<endl;
+            cout<<"\t========ADMINISTRADOR========"<<endl;
             pedirPin();
+            system("cls");
             op = menuAdmin();
             switch(op)
             {
@@ -660,7 +682,7 @@ int main()
                 break;
             case 3:
                 mostrarDoctoresAsignados(inicioTurno);
-                cambiarDoctorEnTurno();
+                cambiarDoctorEnTurno(inicioTurno, inicioPersona);
                 break;
             }
             break;
@@ -693,11 +715,12 @@ int main()
             mostar_Personas(inicioPersona);
             break;
         case 7:
-            vaciarPacientes(inicioTurno);
+            mostrarDoctoresAsignados(inicioTurno);
+
             break;
         case 8:
+            vaciarPacientes(inicioTurno);
 
-            mostrarDoctoresAsignados(inicioTurno);
             break;
         case 9:
             cout<<"Saliendo del programa...";

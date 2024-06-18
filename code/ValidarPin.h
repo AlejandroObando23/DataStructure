@@ -6,7 +6,8 @@ void pedirPin(){
 int pinIngresado;
 const int pinCorrecto = 1234;
   do{
-    cout<<"Ingrese su PIN de 4 digitos: ";
+    cout<<"\nIngrese su PIN de 4 digitos "<<endl;
+    cout<<"PIN: ";
     cin>>pinIngresado;
 
     if(cin.fail() || (pinIngresado < 1000 || pinIngresado > 9999)){
@@ -16,6 +17,7 @@ const int pinCorrecto = 1234;
     }else{
       if(pinIngresado == pinCorrecto){
         cout<<"Pin Correcto"<<endl;
+        cout<<"Acceso concedido....";
          getch();
       }else{
         cout<<"Error: PIN incorrecto."<<endl;
