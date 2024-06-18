@@ -48,7 +48,7 @@ void mostrarMenuPrincipal(int opcionActual)
 
     cout << "\n\tSeleccione una opcion:\n" << endl;
     cout << "\t===========================" << endl;
-    for(int i=1; i<=8; i++)
+    for(int i=1; i<=9; i++)
     {
         if(i==opcionActual)
         {
@@ -106,10 +106,10 @@ int escogerOpcion()
         switch(tecla)
         {
         case 72:
-            opcionActual=(opcionActual>1)?opcionActual-1:8;
+            opcionActual=(opcionActual>1)?opcionActual-1:9;
             break;
         case 80:
-            opcionActual=opcionActual<8?opcionActual+1:1;
+            opcionActual=opcionActual<9?opcionActual+1:1;
             break;
         case 13:
             system("cls");
@@ -138,6 +138,9 @@ int escogerOpcion()
                 break;
             case 8:
                 return 8;
+                break;
+            case 9:
+                return 9;
                 break;
             };
             break;
